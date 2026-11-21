@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Archive, ArrowRight, BookOpen, CheckCircle2, FileText, History, Plus, Share2 } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle2, FileText, History, Plus } from 'lucide-react';
 import { UpvcWindowType } from '../types/quotation';
 import { ApolloCatalogModal } from './ApolloCatalogModal';
 
@@ -24,43 +24,7 @@ export const ProductSelection: React.FC<ProductSelectionProps> = ({
   onLoadSampleQuote,
   onOpenHistory,
 }) => {
-  const [busyZip, setBusyZip] = useState<string | null>(null);
-  const [zipStatus, setZipStatus] = useState<string>('');
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-
-  const handleExportZip = async (path: string, fileName: string, mode: 'download' | 'share') => {
-    setBusyZip(fileName);
-    setZipStatus('');
-    try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const blob = await res.blob();
-      const file = new File([blob], fileName, { type: 'application/zip' });
-
-      if (mode === 'share' && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: fileName,
-          files: [file],
-        });
-        setZipStatus(`Saved / shared ${fileName}.`);
-        return;
-      }
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
-      setZipStatus(`Downloaded ${fileName}. If blocked on mobile, tap Share next to it.`);
-    } catch {
-      setZipStatus(`Could not export ${fileName}. Please try the Share button.`);
-    } finally {
-      setBusyZip(null);
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:py-10">
@@ -183,56 +147,6 @@ export const ProductSelection: React.FC<ProductSelectionProps> = ({
               <span>Browse APL Apollo Types &amp; Sizes</span>
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* Compact App Backup & Deployment ZIP Bar */}
-      <div className="mt-6 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold text-slate-900">App Backup &amp; Cloudflare Deployment ZIPs</p>
-          <p className="text-xs text-slate-500 mt-0.5">
-            {zipStatus || 'Upload "Cloudflare Upload (.zip)" directly on pages.cloudflare.com (zero third-party logo).'}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={() => void handleExportZip('/omega-doors-web-build.zip', 'omega-doors-cloudflare-upload.zip', 'download')}
-            disabled={busyZip !== null}
-            className="min-h-[40px] px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold inline-flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
-          >
-            <Archive className="w-3.5 h-3.5" />
-            <span>{busyZip === 'omega-doors-cloudflare-upload.zip' ? 'Saving...' : 'Cloudflare Upload (.zip)'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => void handleExportZip('/omega-doors-web-build.zip', 'omega-doors-cloudflare-upload.zip', 'share')}
-            disabled={busyZip !== null}
-            aria-label="Share or save Cloudflare upload zip to phone"
-            className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold inline-flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>Save / Share</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => void handleExportZip('/omega-doors-full-project.zip', 'omega-doors-full-project.zip', 'download')}
-            disabled={busyZip !== null}
-            className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-900 text-xs font-semibold inline-flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
-          >
-            <Archive className="w-3.5 h-3.5" />
-            <span>{busyZip === 'omega-doors-full-project.zip' ? 'Saving...' : 'Source Code (.zip)'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => void handleExportZip('/omega-doors-full-project.zip', 'omega-doors-full-project.zip', 'share')}
-            disabled={busyZip !== null}
-            aria-label="Share or save full source zip to phone"
-            className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold inline-flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>Save / Share</span>
-          </button>
         </div>
       </div>
 

@@ -4,7 +4,6 @@ import { ClientInfoStep } from './components/ClientInfoStep';
 import { LoginScreen } from './components/LoginScreen';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { ProductSelection } from './components/ProductSelection';
-import { PWAInstallButton } from './components/PWAInstallButton';
 import { QuotationHistoryStep } from './components/QuotationHistoryStep';
 import { QuotationPreviewStep } from './components/QuotationPreviewStep';
 import { WindowBuilderStep } from './components/WindowBuilderStep';
@@ -205,7 +204,6 @@ export default function App() {
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">
-          <PWAInstallButton />
           <button
             type="button"
             onClick={handleLogout}
