@@ -29,6 +29,7 @@ const AUTH_STORAGE_KEY = 'omega_quote_auth_v1';
 const DRAFT_STORAGE_KEY = 'omega_quote_draft_v1';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     try {
       return sessionStorage.getItem(AUTH_STORAGE_KEY) === 'true';
@@ -38,6 +39,11 @@ export default function App() {
   });
 
   const [step, setStep] = useState<AppStep>('product');
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const [history, setHistory] = useState<QuotationHistoryEntry[]>(() => getQuotationHistory());
 
@@ -151,6 +157,21 @@ export default function App() {
       quotation.client.mobile.trim() ||
       quotation.windows.some((w) => w.ratePerSqFt > 0)
   );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <img
+            src="/assets/quotation/omega-logo.jpg"
+            alt="Omega Doors"
+            className="w-32 h-32 object-contain animate-pulse"
+          />
+          <p className="text-sm font-medium text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
