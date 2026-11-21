@@ -1,5 +1,7 @@
 # Omega Doors Quotation Builder — App Structure & Workflow
 
+**Live URL:** https://omega-doors-quotation.ooooomega231.workers.dev
+
 ## 1. Application Workflow
 1. **Login Screen (`src/components/LoginScreen.tsx`)**
    - Default credentials: Username `omega` / Password `omega`.
