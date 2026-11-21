@@ -1,0 +1,8 @@
+{
+  "name": "Omega Doors Quotation Builder",
+  "description": "Mobile quotation generator for Omega Doors Industries UPVC windows and APL Apollo systems with 5-page PDF export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
